@@ -1,21 +1,29 @@
 const Product = require("../models/product");
 
-exports.productCreatePost = async (req, res, next) => {
-  const product = new Product({
-    name: req.body.name,
-    price: req.body.price,
-    description: req.body.description,
-  });
-  const newProduct = await product.save();
+exports.productCreate = (req, res, next) => {
+  const product = new Product(req.body);
+  product
+    .save()
+    .then((prod) => res.json(prod))
+    .catch((err) => next(err));
 };
 
-exports.productsListGet = (req, res, next) => {
+exports.productListGet = (req, res, next) => {
   Product.find()
     .sort({ name: 1 })
-    .then(function (productsList) {
-      res.json(productsList);
-    })
-    .catch((err) => {
-      return next(err);
-    });
+    .then((productsList) => res.json(productsList))
+    .catch((err) => next(err));
+};
+
+exports.productDelete = (req, res, next) => {
+  Product.findByIdAndRemove(req.params.id)
+    .then((prod) => res.json(prod))
+    .catch((err) => next(err));
+};
+
+exports.productUpdate = (req, res, next) => {
+  const product = new Product(req.body);
+  Product.findByIdAndUpdate(req.params.id, product)
+    .then((prod) => res.json(prod))
+    .catch((err) => next(err));
 };

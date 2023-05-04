@@ -9,8 +9,6 @@ const userArgs = process.argv.slice(2);
 
 const Product = require("./models/product");
 
-const products = [];
-
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false); // Prepare for Mongoose 7
 
@@ -27,19 +25,41 @@ async function main() {
   mongoose.connection.close();
 }
 
-async function productCreate(name, price, description) {
+async function productCreate(name, price, description, imageUrl) {
   const priceFormatted = price.toFixed(2);
-  const product = new Product({ name, price: priceFormatted, description });
+  const product = new Product({
+    name,
+    price: priceFormatted,
+    description,
+    imageUrl,
+  });
   await product.save();
-  products.push(product);
   console.log(`Added product: ${name}`);
 }
 
 async function createProducts() {
   console.log("Adding products");
   await Promise.all([
-    productCreate("name1", 1, "description1"),
-    productCreate("name2", 2.0, "description2"),
-    productCreate("name3", 3.065, "description3"),
+    productCreate(
+      1,
+      "name1",
+      1,
+      "description1",
+      "https://raw.githubusercontent.com/ricardoliu99/react-online-store/main/server/images/orange.jpg"
+    ),
+    productCreate(
+      2,
+      "name2",
+      2.0,
+      "description2",
+      "https://raw.githubusercontent.com/ricardoliu99/react-online-store/main/server/images/orange.jpg"
+    ),
+    productCreate(
+      3,
+      "name3",
+      3.065,
+      "description3",
+      "https://raw.githubusercontent.com/ricardoliu99/react-online-store/main/server/images/orange.jpg"
+    ),
   ]);
 }

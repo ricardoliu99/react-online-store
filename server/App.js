@@ -4,6 +4,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const passport = require("passport");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 require("dotenv").config({ path: "./config.env" });
 
 const mainRouter = require("./routes/main");
@@ -25,8 +28,22 @@ app.set("view engine", "pug");
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(
+  session({
+    secret: "hello",
+    rolling: true,
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: mongoDB }),
+    cookie: { maxAge: 60000 },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", mainRouter);
 

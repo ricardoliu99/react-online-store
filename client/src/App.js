@@ -1,15 +1,12 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import RouteSwitch from "./components/RouteSwitch";
+import Cart from "./components/Cart";
+import {
+  ShoppingCart as ShoppingCartIcon,
+  Clear as ClearIcon,
+} from "@mui/icons-material";
+import { IconButton, Drawer, AppBar, Toolbar, Typography } from "@mui/material";
 
-import CreateProduct from "./components/createProduct";
-import ListProducts from "./components/listProducts";
-
-const App = () => {
-  return (
-    <div>
-      <ListProducts />
-    </div>
-  );
-};
-
-export default App;
+export default function App() {
+  return <RouteSwitch />;
+}
